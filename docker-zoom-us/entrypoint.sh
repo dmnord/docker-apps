@@ -1,19 +1,26 @@
 #!/bin/bash
+
 set -e
+
+BINARY_NAME=zoom
+ZOOM_US_USER=zoom
 
 USER_UID=${USER_UID:-1000}
 USER_GID=${USER_GID:-1000}
 
-ZOOM_US_USER=zoom
 
 install_zoom_us() {
   echo "Installing zoom..."
-  install -m 0755 /var/cache/zoom-us/zoom-wrapper /target/zoom
+  install -m 0755 /var/cache/zoom/zoom-wrapper /target/${BINARY_NAME}
+  install -m 0644 /usr/share/applications/Zoom.desktop /sharedir/applications/${BINARY_NAME}.desktop
+  install -m 0644 /usr/share/pixmaps/Zoom.png  /sharedir/pixmaps/Zoom.png
 }
 
 uninstall_zoom_us() {
   echo "Uninstalling zoom..."
-  rm -rf /target/zoom
+  rm -f /target/${BINARY_NAME}
+  rm -f /sharedir/applications/${BINARY_NAME}.desktop
+  rm -f /sharedir/pixmaps/Zoom.png
 }
 
 create_user() {
@@ -62,7 +69,7 @@ case "$1" in
   uninstall)
     uninstall_zoom_us
     ;;
-  zoom)
+  ${BINARY_NAME})
     create_user
     grant_access_to_video_devices
     echo "$1"

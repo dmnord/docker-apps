@@ -1,19 +1,26 @@
 #!/bin/bash
+
 set -e
+
+BINARY_NAME=teams-insiders
+TEAMS_USER=teams
 
 USER_UID=${USER_UID:-1000}
 USER_GID=${USER_GID:-1000}
 
-TEAMS_USER=teams
 
 install_teams() {
   echo "Installing teams..."
-  install -m 0755 /var/cache/teams/teams-wrapper /target/teams
+  install -m 0755 /var/cache/teams/teams-wrapper /target/${BINARY_NAME}
+  install -m 0644 /usr/share/applications/${BINARY_NAME}.desktop /sharedir/applications/${BINARY_NAME}.desktop
+  install -m 0644 /usr/share/pixmaps/${BINARY_NAME}.png  /sharedir/pixmaps/${BINARY_NAME}.png
 }
 
 uninstall_teams() {
   echo "Uninstalling teams..."
-  rm -rf /target/teams
+  rm -f /target/${BINARY_NAME}
+  rm -f /sharedir/applications/${BINARY_NAME}.desktop
+  rm -f /sharedir/pixmaps/${BINARY_NAME}.png
 }
 
 create_user() {
@@ -66,7 +73,7 @@ grant_access_to_audio_devices() {
 
 launch_teams() {
   cd /home/${TEAMS_USER}
-  exec sudo -HEu ${TEAMS_USER} /usr/share/teams-insiders/teams-insiders "$@" 2>&1
+  exec sudo -HEu ${TEAMS_USER} /usr/share/${BINARY_NAME}/${BINARY_NAME} "$@" 2>&1
 }
 
 case "$1" in
@@ -76,7 +83,7 @@ case "$1" in
   uninstall)
     uninstall_teams
     ;;
-  teams)
+  ${BINARY_NAME})
     create_user
     grant_access_to_video_devices
     grant_access_to_audio_devices
