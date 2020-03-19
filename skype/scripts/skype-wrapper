@@ -31,7 +31,7 @@ prepare_docker_volume_parameters() {
   touch ${XAUTH}
   xauth nlist :0 | sed -e 's/^..../ffff/' | xauth -f ${XAUTH} nmerge -
 
-  VOLUMES+=" --volume=${HOME}/.config/skypeforlinux:/home/${SKYPE_USER}/.config/skypeforlinux"
+  VOLUMES+=" --volume=${HOME}/.skypeforlinux:/home/${SKYPE_USER}"
   VOLUMES+=" --volume=${XSOCK}:${XSOCK}"
   VOLUMES+=" --volume=${XAUTH}:${XAUTH}"
   VOLUMES+=" --volume=/run/user/${USER_UID}/pulse:/run/pulse"
@@ -54,6 +54,7 @@ prepare_docker_device_parameters
 
 echo "Starting ${prog}..."
 ${SUDO} docker run -d --rm \
+  --privileged \
   --cap-add=SYS_ADMIN \
   --security-opt seccomp:unconfined \
   ${ENV_VARS} \

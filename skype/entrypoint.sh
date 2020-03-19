@@ -67,7 +67,7 @@ grant_access_to_audio_devices() {
         AUDIO_GROUP=audioaudio
         groupadd -f -g ${AUDIO_GID} ${AUDIO_GROUP}
       fi
-      usermod -a -G ${AUDIO_GROUP} ${TEAMS_USER}
+      usermod -a -G ${AUDIO_GROUP} ${SKYPE_USER}
       break
     fi
   done
@@ -75,7 +75,20 @@ grant_access_to_audio_devices() {
 
 launch_skype() {
   cd /home/${SKYPE_USER}
-  exec sudo -HEu ${SKYPE_USER} PULSE_SERVER=/run/pulse/native /usr/share/${BINARY_NAME}/${BINARY_NAME} --password-store=basic --executed-from="$(pwd)" --pid=$$ "$@" 2>&1
+cat > /tmp/runscript.sh <<EOF
+#!/bin/bash
+
+eval "\$(dbus-launch --sh-syntax)" 2>&1
+
+mkdir -p \${HOME}/.cache
+eval "\$(printf '\n' | gnome-keyring-daemon --unlock)" 2>&1
+eval "\$(printf '\n' | gnome-keyring-daemon --start)" 2>&1
+
+export PULSE_SERVER=/run/pulse/native
+exec /usr/share/\${1}/\${1} --password-store=basic --executed-from="\$(pwd)" --pid=\$\$ "\$@" 2>&1
+EOF
+  chmod +x /tmp/runscript.sh
+  sudo -HEu ${SKYPE_USER} /tmp/runscript.sh ${BINARY_NAME}
 }
 
 case "$1" in

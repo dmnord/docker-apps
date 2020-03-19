@@ -8,7 +8,8 @@ RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc \
 
 RUN dnf -y install teams-insiders
 
-RUN dnf -y install sudo alsa-utils gtk3 PackageKit-gtk3-module libcanberra-gtk3 curl findutils procps-ng xcompmgr
+RUN dnf -y install findutils procps-ng \
+ && dnf -y install sudo alsa-utils gtk3 PackageKit-gtk3-module libcanberra-gtk3
 
 COPY scripts/ /var/cache/teams-insiders/
 COPY entrypoint.sh /usr/bin/entrypoint.sh
