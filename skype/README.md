@@ -14,7 +14,3 @@ docker run -it --rm --volume /usr/bin:/target --volume /usr/share:/sharedir skyp
 # to run Skype, make sure you have enough permissions to
 # run docker containers and the user is a desktop's owner:
 skypeforlinux
-
-
-# Known issues:
-I do not know how to make an integration between Skype and Gnome Keyring within a container
