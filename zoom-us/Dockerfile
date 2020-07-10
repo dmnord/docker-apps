@@ -1,4 +1,4 @@
-FROM fedora:31
+FROM fedora:32
 MAINTAINER dmnord
 
 ENV ZOOM_URL=https://zoom.us/client/latest/zoom_x86_64.rpm

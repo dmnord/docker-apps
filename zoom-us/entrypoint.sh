@@ -37,8 +37,10 @@ create_user() {
 
   # prepare the required permissions
   chown -R ${USER_UID}:${USER_GID} /home/${ZOOM_US_USER}
+  touch /home/${ZOOM_US_USER}/temp
   find /home/${ZOOM_US_USER} -type d | xargs chmod 755
   find /home/${ZOOM_US_USER} -type f | xargs chmod 644
+  rm -f /home/${ZOOM_US_USER}/temp
 }
 
 grant_access_to_video_devices() {
