@@ -10,6 +10,7 @@ RUN dnf -y install findutils procps-ng \
 
 RUN curl -sSL $ZOOM_URL -o /tmp/zoom.rpm \
  && dnf -y install /tmp/zoom.rpm \
+ && dnf -y install qt5-qtdeclarative qt5-qtscript \
  && rm -f /tmp/zoom.rpm
 
 COPY scripts/ /var/cache/zoom/
