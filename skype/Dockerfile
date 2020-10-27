@@ -1,4 +1,4 @@
-FROM fedora:31
+FROM fedora:32
 MAINTAINER dmnord
 
 ENV SKYPE_URL=https://repo.skype.com/latest/skypeforlinux-64.rpm
